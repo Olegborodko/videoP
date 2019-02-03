@@ -18,17 +18,3 @@ app.use(usersRoutes.routes());
 //app.use(router.routes());
 
 app.listen(3000);
-
-
-const bcrypt = require('bcrypt');
-var salt = bcrypt.genSaltSync();
-
-bcrypt.hash('mypassword', salt, function(err, hash){
-    if(err) throw err;
-        console.log(hash);
-    bcrypt.compare('mypassword', hash, function(err, result) {
-        if (err) { throw (err); }
-        console.log(result);
-    });
-
-});
