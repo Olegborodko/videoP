@@ -3,6 +3,10 @@ module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
         email: {
             type: DataTypes.STRING,
+            unique: {
+                args: true,
+                msg: 'email already in use'
+            },
             validate: {
                 isEmail: {
                   msg: 'email is not correct'
@@ -28,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         login: {
             type: DataTypes.STRING,
+            unique: {
+                args: true,
+                msg: 'login already in use'
+            },
             validate: {
                 is: {
                     args: /^[a-zA-Z1-9]+$/,

@@ -1,7 +1,8 @@
 const Router = require('koa-router');
 const sequelize = require('../../config/sequelize');
 const models = require('../../db/models');
-
+const formatErrors = require('../../config/formatErrors');
+const errorText = require('../../config/listErrors');
 
 const router = new Router();
 
@@ -21,30 +22,30 @@ router.post('/users', async (ctx) => {
     const email = ctx.request.body['email'];
     const login = ctx.request.body['login'];
 
-    models.User.create({
+    return models.User.create({
         email: email,
         password: password,
         login: login
-    }).then(anotherTask => {
-
+    }).then(data => {
+        ctx.body = { success: data };
     })
-    .catch(error => {
-        //throw error;
-        // console.log(error.errors[0].message);
-        // console.log(error.errors[1].message);
-
-        error.errors.forEach(function(item, i, arr) {
-            console.log( item.message );
-        });
-
+    .catch(data => {
+        ctx.body = { errors: formatErrors(data) };
         //console.log(error.message);
         //console.log(error.name);
         //console.log(error.errors[0]);
-    }).catch(err => {
-        console.log(err);
     });
 
+});
 
+//get users
+router.get('/users', async (ctx) => {
+    return models.User.findAll().then(data => {
+        ctx.body = { success: data };
+    })
+    .catch(data => {
+        ctx.body = { errors: errorText.something }
+    })
 });
 
 module.exports = router;
