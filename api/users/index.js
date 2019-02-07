@@ -30,6 +30,7 @@ router.post('/users', async (ctx) => {
         ctx.body = { success: data };
     })
     .catch(data => {
+        ctx.status = 400;
         ctx.body = { errors: formatErrors(data) };
         //console.log(error.message);
         //console.log(error.name);
@@ -44,6 +45,7 @@ router.get('/users', async (ctx) => {
         ctx.body = { success: data };
     })
     .catch(data => {
+        ctx.status = 404;
         ctx.body = { errors: errorText.something }
     })
 });
