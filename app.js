@@ -1,7 +1,11 @@
+require('dotenv').config();
 const Koa = require('koa');
 const logger = require('koa-morgan');
 const Router = require('koa-router');
 const bodyParser = require('koa-body');
+
+const fs = require('fs');
+const https = require('https');
 
 const cookiesMiddleware = require('universal-cookie-koa');
 
@@ -20,6 +24,11 @@ app.use(usersRoutes.routes());
 
 //app.use(router.routes());
 
-const server = app.listen(3000);
+const server = https.createServer({
+    key: fs.readFileSync('./config/keys/key.pem'),
+    cert: fs.readFileSync('./config/keys/cert.pem'),
+    requestCert: false,
+    rejectUnauthorized: false
+}, app.callback()).listen(3000);
 
 module.exports = server;
