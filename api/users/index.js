@@ -39,6 +39,11 @@ router.post('/users', async (ctx) => {
 
 });
 
+//login user
+router.post('/users/login', async (ctx) => {
+    ctx.body = { success: 'good' }
+});
+
 //get users
 router.get('/users', async (ctx) => {
     return models.User.findAll().then(data => {
