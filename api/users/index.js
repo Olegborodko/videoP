@@ -3,6 +3,9 @@ const sequelize = require('../../config/sequelize');
 const models = require('../../db/models');
 const formatErrors = require('../../config/formatErrors');
 const errorText = require('../../config/listErrors');
+require('../../config/auth');
+const passport = require('koa-passport');
+//router.use(passport.initialize());
 
 const router = new Router();
 
@@ -27,6 +30,13 @@ router.post('/users', async (ctx) => {
         password: password,
         login: login
     }).then(data => {
+        ctx.request.universalCookies.set('cat','name3',{
+            //domain: "localhost"
+            //signed: true,
+            //secure: true,
+            httpOnly: false
+        });
+
         ctx.body = { success: data };
     })
     .catch(data => {
@@ -39,11 +49,6 @@ router.post('/users', async (ctx) => {
 
 });
 
-//login user
-router.post('/users/login', async (ctx) => {
-    ctx.body = { success: 'good' }
-});
-
 //get users
 router.get('/users', async (ctx) => {
     return models.User.findAll().then(data => {
@@ -53,6 +58,19 @@ router.get('/users', async (ctx) => {
         ctx.status = 404;
         ctx.body = { errors: errorText.something }
     })
+});
+
+//======================
+router.post('/user', function(ctx) {
+    return passport.authenticate('jwt', function(err, user, info, status) {
+        if (user === false) {
+            ctx.body = { success: false }
+            ctx.throw(401);
+        } else {
+            ctx.body = { success: true }
+            return ctx.login(user);
+        }
+    })(ctx)
 });
 
 module.exports = router;

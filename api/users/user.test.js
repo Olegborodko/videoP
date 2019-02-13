@@ -29,6 +29,9 @@ describe('POST /users', () => {
     expect(response.status).toEqual(200);
     expect(response.type).toEqual("application/json");
     expect(response.body.success.login).toEqual('john12');
+    expect(response.cookies).toEqual('name3');
+    //expect(response.universalCookies).toEqual('name3');
+
 
     });
 });

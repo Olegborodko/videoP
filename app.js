@@ -18,30 +18,6 @@ const router = new Router();
 
 app.use(bodyParser());
 
-//=============
-
-require('./config/auth');
-const passport = require('koa-passport');
-
-app.use(passport.initialize());
-
-router.post('/user', function(ctx) {
-    return passport.authenticate('jwt', function(err, user, info, status) {
-        if (user === false) {
-            ctx.body = { success: false }
-            ctx.throw(401)
-        } else {
-            ctx.body = { success: true }
-            return ctx.login(user)
-        }
-    })(ctx)
-});
-
-
-//=============
-
-//app.use(auth.initialize());
-
 app.use(cookiesMiddleware());
 app.use(logger('tiny'));
 
